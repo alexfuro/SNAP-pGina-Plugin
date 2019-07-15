@@ -32,5 +32,11 @@ namespace pGina.Plugin.SNAP
             UpdateUser myDialog = new UpdateUser();
             myDialog.ShowDialog();
         }
+
+        private void BtnDeleteUser_Click(object sender, EventArgs e)
+        {
+            DeleteUser myDialog = new DeleteUser();
+            myDialog.ShowDialog();
+        }
     }
 }
