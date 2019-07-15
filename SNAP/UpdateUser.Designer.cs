@@ -51,7 +51,7 @@
             this.btnPhoneKey.Location = new System.Drawing.Point(564, 62);
             this.btnPhoneKey.Name = "btnPhoneKey";
             this.btnPhoneKey.Size = new System.Drawing.Size(92, 34);
-            this.btnPhoneKey.TabIndex = 27;
+            this.btnPhoneKey.TabIndex = 22;
             this.btnPhoneKey.Text = "Scan Phone Key";
             this.btnPhoneKey.UseVisualStyleBackColor = true;
             this.btnPhoneKey.Click += new System.EventHandler(this.BtnPhoneKey_Click_1);
@@ -61,7 +61,7 @@
             this.btnNFCKey.Location = new System.Drawing.Point(564, 13);
             this.btnNFCKey.Name = "btnNFCKey";
             this.btnNFCKey.Size = new System.Drawing.Size(93, 31);
-            this.btnNFCKey.TabIndex = 26;
+            this.btnNFCKey.TabIndex = 20;
             this.btnNFCKey.Text = "Scan NFC Key";
             this.btnNFCKey.UseVisualStyleBackColor = true;
             this.btnNFCKey.Click += new System.EventHandler(this.BtnNFCKey_Click_1);
@@ -71,7 +71,7 @@
             this.btnCancel.Location = new System.Drawing.Point(545, 326);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(111, 53);
-            this.btnCancel.TabIndex = 25;
+            this.btnCancel.TabIndex = 28;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
@@ -81,7 +81,7 @@
             this.btnSave.Location = new System.Drawing.Point(397, 326);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(123, 51);
-            this.btnSave.TabIndex = 24;
+            this.btnSave.TabIndex = 27;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
@@ -92,7 +92,7 @@
             this.txtBoxConfirmPass.Name = "txtBoxConfirmPass";
             this.txtBoxConfirmPass.PasswordChar = '*';
             this.txtBoxConfirmPass.Size = new System.Drawing.Size(388, 20);
-            this.txtBoxConfirmPass.TabIndex = 24;
+            this.txtBoxConfirmPass.TabIndex = 26;
             // 
             // txtBoxPassword
             // 
@@ -100,21 +100,22 @@
             this.txtBoxPassword.Name = "txtBoxPassword";
             this.txtBoxPassword.PasswordChar = '*';
             this.txtBoxPassword.Size = new System.Drawing.Size(388, 20);
-            this.txtBoxPassword.TabIndex = 23;
+            this.txtBoxPassword.TabIndex = 25;
+            this.txtBoxPassword.TextChanged += new System.EventHandler(this.TxtBoxPassword_TextChanged);
             // 
             // txtBoxUserName
             // 
             this.txtBoxUserName.Location = new System.Drawing.Point(147, 122);
             this.txtBoxUserName.Name = "txtBoxUserName";
             this.txtBoxUserName.Size = new System.Drawing.Size(388, 20);
-            this.txtBoxUserName.TabIndex = 21;
+            this.txtBoxUserName.TabIndex = 23;
             // 
             // txtBoxPhoneKey
             // 
             this.txtBoxPhoneKey.Location = new System.Drawing.Point(147, 70);
             this.txtBoxPhoneKey.Name = "txtBoxPhoneKey";
             this.txtBoxPhoneKey.Size = new System.Drawing.Size(388, 20);
-            this.txtBoxPhoneKey.TabIndex = 20;
+            this.txtBoxPhoneKey.TabIndex = 21;
             // 
             // txtBoxNFCKey
             // 
@@ -183,7 +184,7 @@
             this.txtBoxCurrPass.Name = "txtBoxCurrPass";
             this.txtBoxCurrPass.PasswordChar = '*';
             this.txtBoxCurrPass.Size = new System.Drawing.Size(388, 20);
-            this.txtBoxCurrPass.TabIndex = 22;
+            this.txtBoxCurrPass.TabIndex = 24;
             // 
             // UpdateUser
             // 

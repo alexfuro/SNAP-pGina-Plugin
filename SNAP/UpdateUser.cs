@@ -167,5 +167,10 @@ namespace pGina.Plugin.SNAP
             byte[] PhoneKeyAID = { 0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5 };
             txtBoxPhoneKey.Text = readNFC(PhoneKeyAID);
         }
+
+        private void TxtBoxPassword_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
