@@ -11,7 +11,7 @@ namespace SNAP
                             pGina.Shared.Interfaces.IPluginConfiguration
     {
         //Generates a unique ID this is needed for pGina plugins
-        private static readonly Guid m_uuid = new Guid("3BAB97B8-A1EC-4EFA-BFD0-FB9C01030FB9");
+        private static readonly Guid m_uuid = new Guid("95D8F91A-DFA2-494D-A885-125C416E4E52");
         
         //required getter methods
         public string Name
