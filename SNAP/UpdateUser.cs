@@ -85,22 +85,19 @@ namespace pGina.Plugin.SNAP
         private Boolean checkPassword()
         {
             Boolean result = false;
-            int found = 0;
+            string hashedPass = "";
             string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
             //Create hash of password
-            byte[] passBytes = SHA512.Create().ComputeHash(Encoding.UTF8.GetBytes(txtBoxCurrPass.Text));
-            string hashPass = Convert.ToBase64String(passBytes);
+            string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select * From Users where UserName ='" + encUser + "' and PassWord = '"+ hashPass +"'", con);
+            da = new SQLiteDataAdapter("Select PassWord From Users where UserName ='"+ encUser + "'", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
-            found = ds.Tables["Users"].Rows.Count;
-
-            if (found != 0)
-                result = true;
+            hashedPass = ds.Tables[0].Rows[0]["PassWord"].ToString();
 
             con.Close();
+            result = BCrypt.Net.BCrypt.Verify(txtBoxCurrPass.Text, hashedPass);
             return result;
         }
         private bool equalPass()
@@ -136,8 +133,7 @@ namespace pGina.Plugin.SNAP
                         }
                         if (txtBoxPassword.Text != "" && txtBoxConfirmPass.Text != "" && equalPass()) {
                             //Create hash of password
-                            byte[] passBytes = SHA512.Create().ComputeHash(Encoding.UTF8.GetBytes(txtBoxPassword.Text));
-                            string hashPass = Convert.ToBase64String(passBytes);
+                            string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
 
                             cmd.CommandText = "Update Users set Password='" + hashPass + "' where UserName ='" + encUser + "'";
                             cmd.ExecuteNonQuery();
@@ -148,6 +144,7 @@ namespace pGina.Plugin.SNAP
                         txtBoxUserName.Text = "";
                         txtBoxPassword.Text = "";
                         txtBoxConfirmPass.Text = "";
+                        txtBoxCurrPass.Text = "";
 
                         MessageBox.Show("Success!");
                     }

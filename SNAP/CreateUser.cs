@@ -142,8 +142,7 @@ namespace pGina.Plugin.SNAP
                         cmd.ExecuteNonQuery();
 
                         //Create hash of password
-                        byte[] passBytes = SHA512.Create().ComputeHash(Encoding.UTF8.GetBytes(txtBoxPassword.Text));
-                        string hashPass = Convert.ToBase64String(passBytes);
+                        string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
 
                         cmd.CommandText = "insert into Users(PublicKey,UserName,PassWord) values ('" +
                                 txtBoxPhoneKey.Text + "','" + encUser + "','" + hashPass + "')";
