@@ -11,13 +11,60 @@ using GS.PCSC;
 using GS.Util.Hex;
 using GS.SCard.Const;
 using EncryDecry;
+using System.Data.SQLite;
+using System.IO;
+using System.Security.Cryptography;
+
 namespace pGina.Plugin.SNAP
 {
     public partial class CreateUser : Form
     {
+        //Sqlite required datafields
+        SQLiteConnection con;
+        SQLiteDataAdapter da;
+        SQLiteCommand cmd;
+        DataSet ds;
+        //This is a path to the database with all user info
+        private static readonly string dbPath = @"C:\Program Files\pGina\Plugins\SNAP\nfc_unlock.db";
+
         public CreateUser()
         {
             InitializeComponent();
+        }
+
+        private Boolean hasDatabase()
+        {
+            return File.Exists(dbPath);
+        }
+        private void createDB()
+        {
+            SQLiteConnection.CreateFile(dbPath);
+
+            string sql = @"CREATE TABLE Users(
+                               UserId INTEGER PRIMARY KEY AUTOINCREMENT,
+                               UserName  TEXT  NOT NULL,
+                               PassWord  TEXT  NOT NULL,
+                               PublicKey TEXT  NOT NULL);
+                            CREATE TABLE Logs(
+                                LogId INTEGER PRIMARY KEY AUTOINCREMENT,
+                                Date TEXT NOT NULL,
+                                User TEXT NOT NULL,
+                                Message TEXT DEFAULT NULL);
+                            CREATE TABLE Tokens(
+                                Token TEXT NOT NULL);
+                            CREATE TABLE Keys(
+                                KeyId INTEGER PRIMARY KEY AUTOINCREMENT,
+                                UserName TEXT NOT NULL,
+                                SKey Text NOT NULL);";
+            con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
+            con.Open();
+            cmd = new SQLiteCommand(sql, con);
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        private bool equalPass() {
+            return txtBoxPassword.Text == txtBoxConfirmPass.Text;
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -69,6 +116,70 @@ namespace pGina.Plugin.SNAP
         {
             byte[] PhoneKeyAID = { 0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5 };
             txtBoxPhoneKey.Text = readNFC(PhoneKeyAID);
+        }
+
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            bool equalPasswords = equalPass();
+            if (equalPasswords && txtBoxPassword.Text != "")
+            {
+                if (txtBoxNFCKey.Text != "" && txtBoxPhoneKey.Text != "")
+                {
+                    if (txtBoxUserName.Text != "")
+                    {
+                        cmd = new SQLiteCommand();
+                        con.Open();
+                        cmd.Connection = con;
+
+                        //encrypt user name
+                        string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
+
+                        //encrypt symmetric key
+                        string encSKey = EncryptDecrypt.Encrypt(txtBoxNFCKey.Text);
+
+                        cmd.CommandText = "insert into Keys(UserName,SKey) values ('" + encUser + "','" + encSKey + "')";
+
+                        cmd.ExecuteNonQuery();
+
+                        //Create hash of password
+                        byte[] passBytes = SHA512.Create().ComputeHash(Encoding.UTF8.GetBytes(txtBoxPassword.Text));
+                        string hashPass = Convert.ToBase64String(passBytes);
+
+                        cmd.CommandText = "insert into Users(PublicKey,UserName,PassWord) values ('" +
+                                txtBoxPhoneKey.Text + "','" + encUser + "','" + hashPass + "')";
+
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+
+                        txtBoxNFCKey.Text = "";
+                        txtBoxPhoneKey.Text = "";
+                        txtBoxUserName.Text = "";
+                        txtBoxPassword.Text = "";
+                        txtBoxConfirmPass.Text = "";
+
+                        MessageBox.Show("Success!");
+                    }
+                    else {
+                        MessageBox.Show("User name cannot be blank!");
+                    }
+                }
+                else {
+                    MessageBox.Show("There was a problem with the keys. Please scan again.");
+                }
+            }
+            else {
+                MessageBox.Show("passwords do not match. Try again!");
+                txtBoxPassword.Text = "";
+                txtBoxConfirmPass.Text = "";
+            }
+            
+        }
+
+        private void CreateUser_Load(object sender, EventArgs e)
+        {
+            if (!hasDatabase())
+                createDB();
+            con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
         }
     }
 }
