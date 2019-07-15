@@ -54,6 +54,7 @@
             this.btnUpdateUser.TabIndex = 1;
             this.btnUpdateUser.Text = "Update User Credentials";
             this.btnUpdateUser.UseVisualStyleBackColor = true;
+            this.btnUpdateUser.Click += new System.EventHandler(this.BtnUpdateUser_Click);
             // 
             // btnDeleteUser
             // 
