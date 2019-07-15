@@ -116,13 +116,6 @@ namespace pGina.Plugin.SNAP
                         //encrypt user name
                         string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
 
-                        if (txtBoxNFCKey.Text != "") {
-                            //encrypt symmetric key
-                            string encSKey = EncryptDecrypt.Encrypt(txtBoxNFCKey.Text);
-                            cmd.CommandText = "Update Keys set SKey='" + encSKey + "' where UserName ='" + encUser + "'";
-
-                            cmd.ExecuteNonQuery();
-                        }
                         if (txtBoxPhoneKey.Text != "") {
 
                             cmd.CommandText = "Update Users set PublicKey='" + txtBoxPhoneKey.Text + "' where UserName ='" + encUser + "'";
@@ -137,7 +130,7 @@ namespace pGina.Plugin.SNAP
                             cmd.ExecuteNonQuery();
                         }
                         con.Close();
-                        txtBoxNFCKey.Text = "";
+                        
                         txtBoxPhoneKey.Text = "";
                         txtBoxUserName.Text = "";
                         txtBoxPassword.Text = "";
@@ -156,15 +149,9 @@ namespace pGina.Plugin.SNAP
             }
         }
 
-        private void BtnNFCKey_Click_1(object sender, EventArgs e)
-        {
-            byte[] NFCKeyAID = { 0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5 };
-            txtBoxNFCKey.Text = readNFC(NFCKeyAID);
-        }
-
         private void BtnPhoneKey_Click_1(object sender, EventArgs e)
         {
-            byte[] PhoneKeyAID = { 0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5 };
+            byte[] PhoneKeyAID = { 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0 };
             txtBoxPhoneKey.Text = readNFC(PhoneKeyAID);
         }
 

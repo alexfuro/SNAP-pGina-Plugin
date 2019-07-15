@@ -63,8 +63,6 @@ namespace pGina.Plugin.SNAP
                 string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
                 cmd.CommandText = "delete from Users where UserName='" + encUser + "'";
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "delete from Keys where UserName='" + encUser + "'";
-                cmd.ExecuteNonQuery();
                 con.Close();
 
                 txtBoxUserName.Text = "";

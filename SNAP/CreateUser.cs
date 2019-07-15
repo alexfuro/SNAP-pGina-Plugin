@@ -51,11 +51,7 @@ namespace pGina.Plugin.SNAP
                                 User TEXT NOT NULL,
                                 Message TEXT DEFAULT NULL);
                             CREATE TABLE Tokens(
-                                Token TEXT NOT NULL);
-                            CREATE TABLE Keys(
-                                KeyId INTEGER PRIMARY KEY AUTOINCREMENT,
-                                UserName TEXT NOT NULL,
-                                SKey Text NOT NULL);";
+                                Token TEXT NOT NULL);";
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
             con.Open();
             cmd = new SQLiteCommand(sql, con);
@@ -72,11 +68,6 @@ namespace pGina.Plugin.SNAP
             this.Close();
         }
 
-        private void BtnNFCKey_Click(object sender, EventArgs e)
-        {
-            byte[] NFCKeyAID = { 0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5 };
-            txtBoxNFCKey.Text = readNFC(NFCKeyAID);
-        }
         private string readNFC(byte [] AID) {
             PCSCReader reader = new PCSCReader();
             string payload = "";
@@ -114,7 +105,7 @@ namespace pGina.Plugin.SNAP
 
         private void BtnPhoneKey_Click(object sender, EventArgs e)
         {
-            byte[] PhoneKeyAID = { 0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5 };
+            byte[] PhoneKeyAID = { 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0 };
             txtBoxPhoneKey.Text = readNFC(PhoneKeyAID);
         }
 
@@ -123,7 +114,7 @@ namespace pGina.Plugin.SNAP
             bool equalPasswords = equalPass();
             if (equalPasswords && txtBoxPassword.Text != "")
             {
-                if (txtBoxNFCKey.Text != "" && txtBoxPhoneKey.Text != "")
+                if (txtBoxPhoneKey.Text != "")
                 {
                     if (txtBoxUserName.Text != "")
                     {
@@ -134,13 +125,6 @@ namespace pGina.Plugin.SNAP
                         //encrypt user name
                         string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
 
-                        //encrypt symmetric key
-                        string encSKey = EncryptDecrypt.Encrypt(txtBoxNFCKey.Text);
-
-                        cmd.CommandText = "insert into Keys(UserName,SKey) values ('" + encUser + "','" + encSKey + "')";
-
-                        cmd.ExecuteNonQuery();
-
                         //Create hash of password
                         string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
 
@@ -150,7 +134,6 @@ namespace pGina.Plugin.SNAP
                         cmd.ExecuteNonQuery();
                         con.Close();
 
-                        txtBoxNFCKey.Text = "";
                         txtBoxPhoneKey.Text = "";
                         txtBoxUserName.Text = "";
                         txtBoxPassword.Text = "";
@@ -163,7 +146,7 @@ namespace pGina.Plugin.SNAP
                     }
                 }
                 else {
-                    MessageBox.Show("There was a problem with the keys. Please scan again.");
+                    MessageBox.Show("There was a problem with the key. Please scan again.");
                 }
             }
             else {

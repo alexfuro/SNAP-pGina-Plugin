@@ -29,26 +29,23 @@
         private void InitializeComponent()
         {
             this.btnPhoneKey = new System.Windows.Forms.Button();
-            this.btnNFCKey = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.txtBoxConfirmPass = new System.Windows.Forms.TextBox();
             this.txtBoxPassword = new System.Windows.Forms.TextBox();
             this.txtBoxUserName = new System.Windows.Forms.TextBox();
             this.txtBoxPhoneKey = new System.Windows.Forms.TextBox();
-            this.txtBoxNFCKey = new System.Windows.Forms.TextBox();
             this.lblConfirmPass = new System.Windows.Forms.Label();
             this.lblPassword = new System.Windows.Forms.Label();
             this.lblUserName = new System.Windows.Forms.Label();
             this.lblPhoneKey = new System.Windows.Forms.Label();
-            this.lblNFCKey = new System.Windows.Forms.Label();
             this.lblCurrPass = new System.Windows.Forms.Label();
             this.txtBoxCurrPass = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnPhoneKey
             // 
-            this.btnPhoneKey.Location = new System.Drawing.Point(564, 62);
+            this.btnPhoneKey.Location = new System.Drawing.Point(563, 12);
             this.btnPhoneKey.Name = "btnPhoneKey";
             this.btnPhoneKey.Size = new System.Drawing.Size(92, 34);
             this.btnPhoneKey.TabIndex = 22;
@@ -56,19 +53,9 @@
             this.btnPhoneKey.UseVisualStyleBackColor = true;
             this.btnPhoneKey.Click += new System.EventHandler(this.BtnPhoneKey_Click_1);
             // 
-            // btnNFCKey
-            // 
-            this.btnNFCKey.Location = new System.Drawing.Point(564, 13);
-            this.btnNFCKey.Name = "btnNFCKey";
-            this.btnNFCKey.Size = new System.Drawing.Size(93, 31);
-            this.btnNFCKey.TabIndex = 20;
-            this.btnNFCKey.Text = "Scan NFC Key";
-            this.btnNFCKey.UseVisualStyleBackColor = true;
-            this.btnNFCKey.Click += new System.EventHandler(this.BtnNFCKey_Click_1);
-            // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(545, 326);
+            this.btnCancel.Location = new System.Drawing.Point(544, 276);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(111, 53);
             this.btnCancel.TabIndex = 28;
@@ -78,7 +65,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(397, 326);
+            this.btnSave.Location = new System.Drawing.Point(396, 276);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(123, 51);
             this.btnSave.TabIndex = 27;
@@ -88,7 +75,7 @@
             // 
             // txtBoxConfirmPass
             // 
-            this.txtBoxConfirmPass.Location = new System.Drawing.Point(147, 271);
+            this.txtBoxConfirmPass.Location = new System.Drawing.Point(146, 221);
             this.txtBoxConfirmPass.Name = "txtBoxConfirmPass";
             this.txtBoxConfirmPass.PasswordChar = '*';
             this.txtBoxConfirmPass.Size = new System.Drawing.Size(388, 20);
@@ -96,7 +83,7 @@
             // 
             // txtBoxPassword
             // 
-            this.txtBoxPassword.Location = new System.Drawing.Point(147, 217);
+            this.txtBoxPassword.Location = new System.Drawing.Point(146, 167);
             this.txtBoxPassword.Name = "txtBoxPassword";
             this.txtBoxPassword.PasswordChar = '*';
             this.txtBoxPassword.Size = new System.Drawing.Size(388, 20);
@@ -105,29 +92,22 @@
             // 
             // txtBoxUserName
             // 
-            this.txtBoxUserName.Location = new System.Drawing.Point(147, 122);
+            this.txtBoxUserName.Location = new System.Drawing.Point(146, 72);
             this.txtBoxUserName.Name = "txtBoxUserName";
             this.txtBoxUserName.Size = new System.Drawing.Size(388, 20);
             this.txtBoxUserName.TabIndex = 23;
             // 
             // txtBoxPhoneKey
             // 
-            this.txtBoxPhoneKey.Location = new System.Drawing.Point(147, 70);
+            this.txtBoxPhoneKey.Location = new System.Drawing.Point(146, 20);
             this.txtBoxPhoneKey.Name = "txtBoxPhoneKey";
             this.txtBoxPhoneKey.Size = new System.Drawing.Size(388, 20);
             this.txtBoxPhoneKey.TabIndex = 21;
             // 
-            // txtBoxNFCKey
-            // 
-            this.txtBoxNFCKey.Location = new System.Drawing.Point(147, 15);
-            this.txtBoxNFCKey.Name = "txtBoxNFCKey";
-            this.txtBoxNFCKey.Size = new System.Drawing.Size(388, 20);
-            this.txtBoxNFCKey.TabIndex = 19;
-            // 
             // lblConfirmPass
             // 
             this.lblConfirmPass.AutoSize = true;
-            this.lblConfirmPass.Location = new System.Drawing.Point(23, 274);
+            this.lblConfirmPass.Location = new System.Drawing.Point(22, 224);
             this.lblConfirmPass.Name = "lblConfirmPass";
             this.lblConfirmPass.Size = new System.Drawing.Size(91, 13);
             this.lblConfirmPass.TabIndex = 18;
@@ -136,7 +116,7 @@
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(23, 224);
+            this.lblPassword.Location = new System.Drawing.Point(22, 174);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(53, 13);
             this.lblPassword.TabIndex = 17;
@@ -145,7 +125,7 @@
             // lblUserName
             // 
             this.lblUserName.AutoSize = true;
-            this.lblUserName.Location = new System.Drawing.Point(23, 129);
+            this.lblUserName.Location = new System.Drawing.Point(22, 79);
             this.lblUserName.Name = "lblUserName";
             this.lblUserName.Size = new System.Drawing.Size(60, 13);
             this.lblUserName.TabIndex = 16;
@@ -154,25 +134,16 @@
             // lblPhoneKey
             // 
             this.lblPhoneKey.AutoSize = true;
-            this.lblPhoneKey.Location = new System.Drawing.Point(23, 77);
+            this.lblPhoneKey.Location = new System.Drawing.Point(22, 27);
             this.lblPhoneKey.Name = "lblPhoneKey";
             this.lblPhoneKey.Size = new System.Drawing.Size(59, 13);
             this.lblPhoneKey.TabIndex = 15;
             this.lblPhoneKey.Text = "Phone Key";
             // 
-            // lblNFCKey
-            // 
-            this.lblNFCKey.AutoSize = true;
-            this.lblNFCKey.Location = new System.Drawing.Point(23, 22);
-            this.lblNFCKey.Name = "lblNFCKey";
-            this.lblNFCKey.Size = new System.Drawing.Size(49, 13);
-            this.lblNFCKey.TabIndex = 14;
-            this.lblNFCKey.Text = "NFC Key";
-            // 
             // lblCurrPass
             // 
             this.lblCurrPass.AutoSize = true;
-            this.lblCurrPass.Location = new System.Drawing.Point(24, 175);
+            this.lblCurrPass.Location = new System.Drawing.Point(23, 125);
             this.lblCurrPass.Name = "lblCurrPass";
             this.lblCurrPass.Size = new System.Drawing.Size(90, 13);
             this.lblCurrPass.TabIndex = 28;
@@ -180,7 +151,7 @@
             // 
             // txtBoxCurrPass
             // 
-            this.txtBoxCurrPass.Location = new System.Drawing.Point(147, 168);
+            this.txtBoxCurrPass.Location = new System.Drawing.Point(146, 118);
             this.txtBoxCurrPass.Name = "txtBoxCurrPass";
             this.txtBoxCurrPass.PasswordChar = '*';
             this.txtBoxCurrPass.Size = new System.Drawing.Size(388, 20);
@@ -190,23 +161,20 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(679, 396);
+            this.ClientSize = new System.Drawing.Size(679, 343);
             this.Controls.Add(this.txtBoxCurrPass);
             this.Controls.Add(this.lblCurrPass);
             this.Controls.Add(this.btnPhoneKey);
-            this.Controls.Add(this.btnNFCKey);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.txtBoxConfirmPass);
             this.Controls.Add(this.txtBoxPassword);
             this.Controls.Add(this.txtBoxUserName);
             this.Controls.Add(this.txtBoxPhoneKey);
-            this.Controls.Add(this.txtBoxNFCKey);
             this.Controls.Add(this.lblConfirmPass);
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.lblUserName);
             this.Controls.Add(this.lblPhoneKey);
-            this.Controls.Add(this.lblNFCKey);
             this.Name = "UpdateUser";
             this.Text = "UpdateUser";
             this.Load += new System.EventHandler(this.UpdateUser_Load);
@@ -218,19 +186,16 @@
         #endregion
 
         private System.Windows.Forms.Button btnPhoneKey;
-        private System.Windows.Forms.Button btnNFCKey;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.TextBox txtBoxConfirmPass;
         private System.Windows.Forms.TextBox txtBoxPassword;
         private System.Windows.Forms.TextBox txtBoxUserName;
         private System.Windows.Forms.TextBox txtBoxPhoneKey;
-        private System.Windows.Forms.TextBox txtBoxNFCKey;
         private System.Windows.Forms.Label lblConfirmPass;
         private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.Label lblUserName;
         private System.Windows.Forms.Label lblPhoneKey;
-        private System.Windows.Forms.Label lblNFCKey;
         private System.Windows.Forms.Label lblCurrPass;
         private System.Windows.Forms.TextBox txtBoxCurrPass;
     }
