@@ -34,6 +34,15 @@
     <Reference Include="Abstractions">
       <HintPath>..\..\..\SDK\Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="GS.Apdu">
+      <HintPath>bin\Release\GS.Apdu.dll</HintPath>
+    </Reference>
+    <Reference Include="GS.CSharpPCSC">
+      <HintPath>bin\Release\GS.CSharpPCSC.dll</HintPath>
+    </Reference>
+    <Reference Include="GS.HexLibrary">
+      <HintPath>bin\Release\GS.HexLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="pGina.Shared">
       <HintPath>..\..\..\SDK\pGina.Shared.dll</HintPath>
     </Reference>
@@ -54,12 +63,22 @@
     <Compile Include="Configuration.Designer.cs">
       <DependentUpon>Configuration.cs</DependentUpon>
     </Compile>
+    <Compile Include="CreateUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateUser.Designer.cs">
+      <DependentUpon>CreateUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EncryptDecrypt.cs" />
     <Compile Include="SNAP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configuration.resx">
       <DependentUpon>Configuration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateUser.resx">
+      <DependentUpon>CreateUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

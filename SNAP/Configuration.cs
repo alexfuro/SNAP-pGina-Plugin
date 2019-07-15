@@ -20,5 +20,11 @@ namespace pGina.Plugin.SNAP
         {
 
         }
+
+        private void BtnCreateUser_Click(object sender, EventArgs e)
+        {
+            CreateUser myDialog = new CreateUser();
+            myDialog.ShowDialog();
+        }
     }
 }
