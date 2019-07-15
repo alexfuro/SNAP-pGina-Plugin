@@ -87,8 +87,6 @@ namespace pGina.Plugin.SNAP
             Boolean result = false;
             string hashedPass = "";
             string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
-            //Create hash of password
-            string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
             da = new SQLiteDataAdapter("Select PassWord From Users where UserName ='"+ encUser + "'", con);
             DataSet ds = new DataSet();
