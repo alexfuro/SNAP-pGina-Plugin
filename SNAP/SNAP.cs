@@ -102,37 +102,70 @@ namespace SNAP
         }
         //This method will return the hash of a user pin given
         //a dev id via @params
-        private string getUserPin(string userName)
+        private string getUserPin(string devId)
         {
-            string pass = "";
-            string encUser = EncryptDecrypt.Encrypt(userName);
+            string pin = "";
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select UserPin From Users where UserName ='" + encUser + "' limit 1", con);
+            da = new SQLiteDataAdapter("Select UserPin From Users where DevId ='" + devId + "' limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
 
-            pass = ds.Tables[0].Rows[0]["UserPin"].ToString();
+            pin = ds.Tables[0].Rows[0]["UserPin"].ToString();
 
             con.Close();
-            return pass;
+            return pin;
+        }
+        private string getUserName(string devId)
+        {
+            string pin = "";
+            con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
+            da = new SQLiteDataAdapter("Select UserName From Users where DevId ='" + devId + "' limit 1", con);
+            DataSet ds = new DataSet();
+            con.Open();
+            da.Fill(ds, "Users");
+
+            pin = ds.Tables[0].Rows[0]["UserName"].ToString();
+
+            con.Close();
+            return pin;
         }
         //This method will return the hash of a user devid given
         //a dev id via @params
-        private string getDevId(string userName)
+        private Boolean validPin(string pinInput, string devId)
         {
-            string pass = "";
-            string encUser = EncryptDecrypt.Encrypt(userName);
+            string userPin = getUserPin(devId);
+            Boolean validPass = BCrypt.Net.BCrypt.Verify(pinInput, userPin);
+            return validPass;
+        }
+        //This method will return the hash of a user devid given
+        //a dev id via @params
+        private Boolean validDevId()
+        {
+            int devid = 0;
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select DevId From Users where UserName ='" + encUser + "' limit 1", con);
+            da = new SQLiteDataAdapter("Select DevId From Users limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
 
-            pass = ds.Tables[0].Rows[0]["DevId"].ToString();
+            devid = ds.Tables["Users"].Rows.Count;
 
             con.Close();
-            return pass;
+            if (devid != 0)
+                return true;
+            return false;
+        }
+        private string readDevId() {
+            CmdApdu uid = new CmdApdu();
+            uid.CLA = 0xFF;
+            uid.INS = 0xCA;
+            uid.P1 = 0x01;
+            uid.P2 = 0x00;
+            uid.Le = 0x04;
+
+            string devId = readNFC(uid);
+            return devId;
         }
         private string readNFC(CmdApdu cmd)
         {
@@ -195,13 +228,19 @@ namespace SNAP
             string newTokenPayload = readNFC(selectApplication);
             Boolean validToken = verifyToken(newTokenPayload);
 
-            if (validToken) {
-                string userPass = getUserPass(userInfo.Username);
-                Boolean validPass = BCrypt.Net.BCrypt.Verify(userInfo.Password, userPass);
-                if (validPass)
+            //get device id
+            string devId = readDevId();
+            if (validDevId())
+            {
+                if (validToken)
                 {
-                    // Successful authentication
-                    return new BooleanResult() { Success = true };
+                    if (validPin(userInfo.Password, devId))
+                    {
+                        userInfo.Username = EncryptDecrypt.Decrypt(getUserName(devId));
+                        userInfo.Password = getUserPass(devId);
+                        // Successful authentication
+                        return new BooleanResult() { Success = true };
+                    }
                 }
             }
             // Authentication failure
