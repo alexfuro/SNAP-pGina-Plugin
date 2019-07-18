@@ -122,17 +122,17 @@ namespace SNAP
         //a userToken via @params
         private string getUserName(string devId)
         {
-            string pin = "";
+            string userName = "";
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
             da = new SQLiteDataAdapter("Select UserName From Users where DevId ='" + devId + "' limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
 
-            pin = ds.Tables[0].Rows[0]["UserName"].ToString();
+            userName = ds.Tables[0].Rows[0]["UserName"].ToString();
 
             con.Close();
-            return pin;
+            return userName;
         }
         //This method will return the hash of a user pin given
         //a userToken via @params
