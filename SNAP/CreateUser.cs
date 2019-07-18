@@ -89,7 +89,7 @@ namespace pGina.Plugin.SNAP
 
                 if (respApdu.SW1SW2 == 0x9000)
                 {
-                    payload = EncryptDecrypt.Encrypt(HexFormatting.DumpAscii(respApdu.Data));
+                    payload = EncryptDecrypt.Encrypt(Encoding.UTF8.GetString(respApdu.Data));
                 }
             }
             catch (Exception ex)
