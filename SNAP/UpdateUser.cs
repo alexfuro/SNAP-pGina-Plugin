@@ -84,7 +84,7 @@ namespace pGina.Plugin.SNAP
             string hashedPin = "";
             string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select UserPin From Users where UserName ='"+ encUser + "'", con);
+            da = new SQLiteDataAdapter("Select UserPin From Users where UserName ='"+ encUser + "' limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
@@ -118,13 +118,18 @@ namespace pGina.Plugin.SNAP
 
                             cmd.ExecuteNonQuery();
                         }
-                        if (txtBoxPassword.Text != "" && txtBoxPin.Text != "") {
+                        if (txtBoxPassword.Text != "")
+                        {
                             //Create hash of password
                             string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
-                            //Create hash of password
+                            cmd.CommandText = "Update Users set Password='" + hashPass + "' where UserName ='" + encUser + "'";
+                            cmd.ExecuteNonQuery();
+                        }
+                        if (txtBoxPin.Text != "") {
+                            //Create hash of pin
                             string hashPin = BCrypt.Net.BCrypt.HashPassword(txtBoxPin.Text);
 
-                            cmd.CommandText = "Update Users set Password='" + hashPass + "', UserPin='" + hashPin + "' where UserName ='" + encUser + "'";
+                            cmd.CommandText = "Update Users set UserPin='" + hashPin + "' where UserName ='" + encUser + "'";
                             cmd.ExecuteNonQuery();
                         }
                         con.Close();
