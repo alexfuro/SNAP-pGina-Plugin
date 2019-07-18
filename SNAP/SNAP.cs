@@ -212,10 +212,10 @@ namespace SNAP
             da.Fill(ds, "Tokens");
             found = ds.Tables["Tokens"].Rows.Count;
 
-            if (found != 1)
-                result = true;
-
             con.Close();
+            if (found != 0)
+                result = true;
+            
             return result;
         }
         
