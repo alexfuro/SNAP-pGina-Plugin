@@ -22,7 +22,7 @@ namespace SNAP
         //Generates a unique ID this is needed for pGina plugins
         private static readonly Guid m_uuid = new Guid("95D8F91A-DFA2-494D-A885-125C416E4E52");
         //This is a path to the database with all user info
-        private static readonly string dbPath = @"C:\Program Files\pGina\Plugins\NFCUnlock\DataBase\nfc_unlock.db";
+        private static readonly string dbPath = @"C:\Program Files\pGina\Plugins\SNAP\nfc_unlock.db";
         //An sqlLite conncection object
         private SQLiteConnection con;
         //An sqlLite command object
@@ -63,6 +63,9 @@ namespace SNAP
         }
         private void createDB()
         {
+            string dbFolder = @"c:\Program Files\pGina\Plugins\SNAP";
+            System.IO.Directory.CreateDirectory(dbFolder);
+
             SQLiteConnection.CreateFile(dbPath);
 
             string sql = @"CREATE TABLE Users(
@@ -116,6 +119,8 @@ namespace SNAP
             con.Close();
             return pin;
         }
+        //This method will return the encrypted username given
+        //a dev id via @params
         private string getUserName(string devId)
         {
             string pin = "";
@@ -130,7 +135,7 @@ namespace SNAP
             con.Close();
             return pin;
         }
-        //This method will return the hash of a user devid given
+        //This method will return the hash of a user pin given
         //a dev id via @params
         private Boolean validPin(string pinInput, string devId)
         {
@@ -138,8 +143,7 @@ namespace SNAP
             Boolean validPass = BCrypt.Net.BCrypt.Verify(pinInput, userPin);
             return validPass;
         }
-        //This method will return the hash of a user devid given
-        //a dev id via @params
+        //This method will return the wether the devid has an account given
         private Boolean validDevId()
         {
             int devid = 0;
@@ -156,6 +160,7 @@ namespace SNAP
                 return true;
             return false;
         }
+        //this method will get the devid from the nfc device
         private string readDevId() {
             CmdApdu uid = new CmdApdu();
             uid.CLA = 0xFF;
@@ -167,6 +172,9 @@ namespace SNAP
             string devId = readNFC(uid);
             return devId;
         }
+        //this method will open a reader instance and read the nfc device with
+        //cmd as its input and the command to run. it will return a string of the result.
+        //@params cmd - the command to run
         private string readNFC(CmdApdu cmd)
         {
             PCSCReader reader = new PCSCReader();
@@ -194,11 +202,12 @@ namespace SNAP
             }
             return payload;
         }
+        //this method will verify if the user token is associated with an account
         private Boolean verifyToken(string token) {
             Boolean result = false;
             int found = 0;
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select UserToken From Users where UserName ='" + token + "'", con);
+            da = new SQLiteDataAdapter("Select UserToken From Users where UserToken ='" + token + "'", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Tokens");
@@ -216,7 +225,9 @@ namespace SNAP
         //@return is a boolean value: true if conditions are satisfied, false otherwise
         public BooleanResult AuthenticateUser(SessionProperties properties)
         {
+            //object that will passed to windows authentication
             UserInformation userInfo = properties.GetTrackedSingle<UserInformation>();
+            //Aid selection for getting token from unlocked phone
             byte[] tokenAID = { 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0 };
             CmdApdu selectApplication = new CmdApdu();
             selectApplication.CLA = 0x00;
