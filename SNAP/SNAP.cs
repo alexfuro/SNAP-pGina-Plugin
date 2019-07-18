@@ -120,11 +120,11 @@ namespace SNAP
         }
         //This method will return the encrypted username given
         //a userToken via @params
-        private string getUserName(string userToken)
+        private string getUserName(string devId)
         {
             string pin = "";
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select UserName From Users where userToken ='" + userToken + "' limit 1", con);
+            da = new SQLiteDataAdapter("Select UserName From Users where DevId ='" + devId + "' limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
@@ -243,21 +243,24 @@ namespace SNAP
             //check if the devid is registered to any account
             if (validDevId(devId))
             {
+                //get username via device id
+                userInfo.Username = EncryptDecrypt.Decrypt(getUserName(devId));
                 //check if the token is associated to an account
                 if (validToken)
-                {
+                {                    
                     //check if pincode matches db pincode with the same devid
                     if (validPin(userInfo.Password, userToken))
                     {
                         //get account details to send to winlogon
-                        userInfo.Username = EncryptDecrypt.Decrypt(getUserName(userToken));
                         userInfo.Password = getUserPass(userToken);
                         // Successful authentication
+                        DBLogger(userInfo.Username, "Sucessful Login");
                         return new BooleanResult() { Success = true };
                     }
                 }
+                // Authentication failure
+                DBLogger(userInfo.Username, "Unsucessful Login attempt");
             }
-            // Authentication failure
             return new BooleanResult() { Success = false, Message = "Incorrect credentials." };
         }
         public void Configure()
@@ -265,5 +268,25 @@ namespace SNAP
             Configuration myDialog = new Configuration();
             myDialog.ShowDialog();
         }
-    }
+        //This method will insert a log message into the log table of the database
+        //it receives via @params the string that is to be inserted
+        //these logs are encrypted
+        private void DBLogger(string user, string msg)
+        {
+            //establish connection to db
+            con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
+            cmd = new SQLiteCommand();
+            con.Open();
+            cmd.Connection = con;
+
+            //encrypt login details
+            string encryptedTime = EncryptDecrypt.Encrypt(DateTime.Now.ToString());
+            string encryptedMsg = EncryptDecrypt.Encrypt(msg);
+            string encryptedUsr = EncryptDecrypt.Encrypt(user);
+            cmd.CommandText = "INSERT INTO Logs(Date,User,Message) values ('" + encryptedTime + "','" + encryptedUsr + "','" + encryptedMsg + "')";
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+    }    
 }
