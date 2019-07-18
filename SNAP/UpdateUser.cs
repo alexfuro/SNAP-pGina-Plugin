@@ -30,6 +30,7 @@ namespace pGina.Plugin.SNAP
         public UpdateUser()
         {
             InitializeComponent();
+            con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
         }
 
         private void UpdateUser_Load(object sender, EventArgs e)

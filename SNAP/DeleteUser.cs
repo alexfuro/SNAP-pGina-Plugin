@@ -25,6 +25,7 @@ namespace pGina.Plugin.SNAP
         public DeleteUser()
         {
             InitializeComponent();
+            con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
         }
         private Boolean hasDatabase()
         {

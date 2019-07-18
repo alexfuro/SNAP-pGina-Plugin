@@ -21,15 +21,15 @@ namespace pGina.Plugin.SNAP
     {
         //Sqlite required datafields
         SQLiteConnection con;
-        SQLiteDataAdapter da;
         SQLiteCommand cmd;
-        DataSet ds;
+        
         //This is a path to the database with all user info
         private static readonly string dbPath = @"C:\Program Files\pGina\Plugins\SNAP\nfc_unlock.db";
 
         public CreateUser()
         {
             InitializeComponent();
+            con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
         }
 
         private bool equalPins() {
