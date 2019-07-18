@@ -87,13 +87,12 @@ namespace SNAP
             con.Close();
         }
         //This method will return the hash of a user password given
-        //a dev id via @params
-        private string getUserPass(string userName)
+        //a userTOken via @params
+        private string getUserPass(string userToken)
         {
             string pass = "";
-            string encUser = EncryptDecrypt.Encrypt(userName);
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select PassWord From Users where UserName ='" + encUser + "' limit 1", con);
+            da = new SQLiteDataAdapter("Select PassWord From Users where UserToken ='" + userToken + "' limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
@@ -104,12 +103,12 @@ namespace SNAP
             return pass;
         }
         //This method will return the hash of a user pin given
-        //a dev id via @params
-        private string getUserPin(string devId)
+        //a userToken via @params
+        private string getUserPin(string userToken)
         {
             string pin = "";
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select UserPin From Users where DevId ='" + devId + "' limit 1", con);
+            da = new SQLiteDataAdapter("Select UserPin From Users where UserToken ='" + userToken + "' limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
@@ -120,12 +119,12 @@ namespace SNAP
             return pin;
         }
         //This method will return the encrypted username given
-        //a dev id via @params
-        private string getUserName(string devId)
+        //a userToken via @params
+        private string getUserName(string userToken)
         {
             string pin = "";
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select UserName From Users where DevId ='" + devId + "' limit 1", con);
+            da = new SQLiteDataAdapter("Select UserName From Users where userToken ='" + userToken + "' limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
@@ -136,27 +135,27 @@ namespace SNAP
             return pin;
         }
         //This method will return the hash of a user pin given
-        //a dev id via @params
-        private Boolean validPin(string pinInput, string devId)
+        //a userToken via @params
+        private Boolean validPin(string pinInput, string userToken)
         {
-            string userPin = getUserPin(devId);
+            string userPin = getUserPin(userToken);
             Boolean validPass = BCrypt.Net.BCrypt.Verify(pinInput, userPin);
             return validPass;
         }
-        //This method will return the wether the devid has an account given
-        private Boolean validDevId()
+        //This method will return the whether the devid has an account given
+        private Boolean validDevId(string devid)
         {
-            int devid = 0;
+            int found = 0;
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select DevId From Users limit 1", con);
+            da = new SQLiteDataAdapter("Select DevId From Users where DevId ='" + devid + "' limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
 
-            devid = ds.Tables["Users"].Rows.Count;
+            found = ds.Tables["Users"].Rows.Count;
 
             con.Close();
-            if (devid != 0)
+            if (found != 0)
                 return true;
             return false;
         }
@@ -236,19 +235,23 @@ namespace SNAP
             selectApplication.P2 = 0x00;
             selectApplication.Data = tokenAID;
             selectApplication.Le = 0x00;
-            string newTokenPayload = readNFC(selectApplication);
-            Boolean validToken = verifyToken(newTokenPayload);
+            string userToken = readNFC(selectApplication);
+            Boolean validToken = verifyToken(userToken);
 
             //get device id
             string devId = readDevId();
-            if (validDevId())
+            //check if the devid is registered to any account
+            if (validDevId(devId))
             {
+                //check if the token is associated to an account
                 if (validToken)
                 {
-                    if (validPin(userInfo.Password, devId))
+                    //check if pincode matches db pincode with the same devid
+                    if (validPin(userInfo.Password, userToken))
                     {
-                        userInfo.Username = EncryptDecrypt.Decrypt(getUserName(devId));
-                        userInfo.Password = getUserPass(devId);
+                        //get account details to send to winlogon
+                        userInfo.Username = EncryptDecrypt.Decrypt(getUserName(userToken));
+                        userInfo.Password = getUserPass(userToken);
                         // Successful authentication
                         return new BooleanResult() { Success = true };
                     }
