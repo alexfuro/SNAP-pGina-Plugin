@@ -88,54 +88,60 @@ namespace pGina.Plugin.SNAP
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            bool equalPinCodes = equalPins();
-            if (equalPinCodes && txtBoxPassword.Text != "")
+            if (hasDatabase())
             {
-                if (txtBoxPhoneKey.Text != "" && txtBoxDevId.Text != "")
+                bool equalPinCodes = equalPins();
+                if (equalPinCodes && txtBoxPassword.Text != "")
                 {
-                    if (txtBoxUserName.Text != "")
+                    if (txtBoxPhoneKey.Text != "" && txtBoxDevId.Text != "")
                     {
-                        cmd = new SQLiteCommand();
-                        con.Open();
-                        cmd.Connection = con;
+                        if (txtBoxUserName.Text != "")
+                        {
+                            cmd = new SQLiteCommand();
+                            con.Open();
+                            cmd.Connection = con;
 
-                        //encrypt user name
-                        string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
+                            //encrypt user name
+                            string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
 
-                        //Create hash of password
-                        string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
-                        //Create hash of password
-                        string hashPin = BCrypt.Net.BCrypt.HashPassword(txtBoxPin.Text);
+                            //Create hash of password
+                            string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
+                            //Create hash of password
+                            string hashPin = BCrypt.Net.BCrypt.HashPassword(txtBoxPin.Text);
 
-                        cmd.CommandText = "insert into Users(DevId,UserName,PassWord,UserToken,UserPin) values ('" +
-                                txtBoxDevId.Text + "','" + encUser + "','" + hashPass + "','" + txtBoxPhoneKey.Text + "','" + hashPin + "')";
+                            cmd.CommandText = "insert into Users(DevId,UserName,PassWord,UserToken,UserPin) values ('" +
+                                    txtBoxDevId.Text + "','" + encUser + "','" + hashPass + "','" + txtBoxPhoneKey.Text + "','" + hashPin + "')";
 
-                        cmd.ExecuteNonQuery();
-                        con.Close();
+                            cmd.ExecuteNonQuery();
+                            con.Close();
 
-                        txtBoxPhoneKey.Text = "";
-                        txtBoxDevId.Text = "";
-                        txtBoxUserName.Text = "";
-                        txtBoxPassword.Text = "";
-                        txtBoxPin.Text = "";
-                        txtBoxConfirmPin.Text = "";
+                            txtBoxPhoneKey.Text = "";
+                            txtBoxDevId.Text = "";
+                            txtBoxUserName.Text = "";
+                            txtBoxPassword.Text = "";
+                            txtBoxPin.Text = "";
+                            txtBoxConfirmPin.Text = "";
 
-                        MessageBox.Show("Success!");
+                            MessageBox.Show("Success!");
+                        }
+                        else
+                        {
+                            MessageBox.Show("User name cannot be blank!");
+                        }
                     }
-                    else {
-                        MessageBox.Show("User name cannot be blank!");
+                    else
+                    {
+                        MessageBox.Show("There was a problem with the key or ID. Please scan again.");
                     }
                 }
-                else {
-                    MessageBox.Show("There was a problem with the key or ID. Please scan again.");
+                else
+                {
+                    MessageBox.Show("Pins do not match. Try again!");
+                    txtBoxPin.Text = "";
+                    txtBoxConfirmPin.Text = "";
                 }
+
             }
-            else {
-                MessageBox.Show("Pins do not match. Try again!");
-                txtBoxPin.Text = "";
-                txtBoxConfirmPin.Text = "";
-            }
-            
         }
 
         private void CreateUser_Load(object sender, EventArgs e)
@@ -164,6 +170,10 @@ namespace pGina.Plugin.SNAP
 
             string devId = readNFC(uid);
             txtBoxDevId.Text = devId;
+        }
+        private Boolean hasDatabase()
+        {
+            return File.Exists(dbPath);
         }
     }
 }
