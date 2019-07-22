@@ -91,7 +91,7 @@ namespace pGina.Plugin.SNAP
             if (hasDatabase())
             {
                 bool equalPinCodes = equalPins();
-                if (equalPinCodes && txtBoxPassword.Text != "")
+                if (equalPinCodes)
                 {
                     if (txtBoxPhoneKey.Text != "" && txtBoxDevId.Text != "")
                     {
@@ -105,12 +105,10 @@ namespace pGina.Plugin.SNAP
                             string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
 
                             //Create hash of password
-                            string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
-                            //Create hash of password
                             string hashPin = BCrypt.Net.BCrypt.HashPassword(txtBoxPin.Text);
 
-                            cmd.CommandText = "insert into Users(DevId,UserName,PassWord,UserToken,UserPin) values ('" +
-                                    txtBoxDevId.Text + "','" + encUser + "','" + hashPass + "','" + txtBoxPhoneKey.Text + "','" + hashPin + "')";
+                            cmd.CommandText = "insert into Users(DevId,UserName,UserToken,UserPin) values ('" +
+                                    txtBoxDevId.Text + "','" + encUser + "','" + txtBoxPhoneKey.Text + "','" + hashPin + "')";
 
                             cmd.ExecuteNonQuery();
                             con.Close();
@@ -118,7 +116,6 @@ namespace pGina.Plugin.SNAP
                             txtBoxPhoneKey.Text = "";
                             txtBoxDevId.Text = "";
                             txtBoxUserName.Text = "";
-                            txtBoxPassword.Text = "";
                             txtBoxPin.Text = "";
                             txtBoxConfirmPin.Text = "";
 

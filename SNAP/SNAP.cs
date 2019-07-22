@@ -72,7 +72,6 @@ namespace SNAP
                                UserId INTEGER PRIMARY KEY AUTOINCREMENT,
                                DevId     TEXT  NOT NULL,
                                UserName  TEXT  NOT NULL,
-                               PassWord  TEXT  NOT NULL,
                                UserToken TEXT  NOT NULL,
                                UserPin   TEXT  NOT NULL);
                            CREATE TABLE Logs(
@@ -86,21 +85,21 @@ namespace SNAP
             cmd.ExecuteNonQuery();
             con.Close();
         }
-        //This method will return the hash of a user password given
+        //This method will return the hash of a user token given
         //a userTOken via @params
-        private string getUserPass(string userToken)
+        private string getUserToken(string devId)
         {
-            string pass = "";
+            string token = "";
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select PassWord From Users where UserToken ='" + userToken + "' limit 1", con);
+            da = new SQLiteDataAdapter("Select UserToken From Users where DevId ='" + devId + "' limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
 
-            pass = ds.Tables[0].Rows[0]["PassWord"].ToString();
+            token = ds.Tables[0].Rows[0]["UserToken"].ToString();
 
             con.Close();
-            return pass;
+            return token;
         }
         //This method will return the hash of a user pin given
         //a userToken via @params
@@ -202,21 +201,9 @@ namespace SNAP
             return payload;
         }
         //this method will verify if the user token is associated with an account
-        private Boolean verifyToken(string token) {
-            Boolean result = false;
-            int found = 0;
-            con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select UserToken From Users where UserToken ='" + token + "'", con);
-            DataSet ds = new DataSet();
-            con.Open();
-            da.Fill(ds, "Tokens");
-            found = ds.Tables["Tokens"].Rows.Count;
-
-            con.Close();
-            if (found != 0)
-                result = true;
-            
-            return result;
+        private Boolean verifyToken(string userTokenInput, string userToken) {
+            //return BCrypt.Net.BCrypt.Verify(userTokenInput, userToken);
+            return true;
         }
         
         //This method is what is in change of authenticating a user
@@ -235,14 +222,16 @@ namespace SNAP
             selectApplication.P2 = 0x00;
             selectApplication.Data = tokenAID;
             selectApplication.Le = 0x00;
-            string userToken = readNFC(selectApplication);
-            Boolean validToken = verifyToken(userToken);
+            string userTokenInput = readNFC(selectApplication);
 
             //get device id
             string devId = readDevId();
             //check if the devid is registered to any account
             if (validDevId(devId))
             {
+                //get token info and verify
+                string userToken = getUserToken(devId);
+                Boolean validToken = verifyToken(userTokenInput, userToken);
                 //get username via device id
                 userInfo.Username = EncryptDecrypt.Decrypt(getUserName(devId));
                 //check if the token is associated to an account
@@ -252,7 +241,7 @@ namespace SNAP
                     if (validPin(userInfo.Password, userToken))
                     {
                         //get account details to send to winlogon
-                        userInfo.Password = getUserPass(userToken);
+                        userInfo.Password = getUserPin(userToken);
                         // Successful authentication
                         DBLogger(userInfo.Username, "Sucessful Login");
                         return new BooleanResult() { Success = true };

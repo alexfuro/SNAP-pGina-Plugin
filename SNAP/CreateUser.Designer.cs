@@ -30,10 +30,8 @@
         {
             this.lblPhoneKey = new System.Windows.Forms.Label();
             this.lblUserName = new System.Windows.Forms.Label();
-            this.lblPassword = new System.Windows.Forms.Label();
             this.txtBoxPhoneKey = new System.Windows.Forms.TextBox();
             this.txtBoxUserName = new System.Windows.Forms.TextBox();
-            this.txtBoxPassword = new System.Windows.Forms.TextBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnPhoneKey = new System.Windows.Forms.Button();
@@ -64,15 +62,6 @@
             this.lblUserName.TabIndex = 2;
             this.lblUserName.Text = "User Name";
             // 
-            // lblPassword
-            // 
-            this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(22, 173);
-            this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(53, 13);
-            this.lblPassword.TabIndex = 3;
-            this.lblPassword.Text = "Password";
-            // 
             // txtBoxPhoneKey
             // 
             this.txtBoxPhoneKey.Location = new System.Drawing.Point(146, 66);
@@ -87,17 +76,9 @@
             this.txtBoxUserName.Size = new System.Drawing.Size(388, 20);
             this.txtBoxUserName.TabIndex = 5;
             // 
-            // txtBoxPassword
-            // 
-            this.txtBoxPassword.Location = new System.Drawing.Point(146, 166);
-            this.txtBoxPassword.Name = "txtBoxPassword";
-            this.txtBoxPassword.PasswordChar = '*';
-            this.txtBoxPassword.Size = new System.Drawing.Size(388, 20);
-            this.txtBoxPassword.TabIndex = 6;
-            // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(395, 320);
+            this.btnSave.Location = new System.Drawing.Point(395, 277);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(123, 51);
             this.btnSave.TabIndex = 9;
@@ -107,7 +88,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(544, 318);
+            this.btnCancel.Location = new System.Drawing.Point(544, 275);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(111, 53);
             this.btnCancel.TabIndex = 10;
@@ -155,7 +136,7 @@
             // 
             // txtBoxConfirmPin
             // 
-            this.txtBoxConfirmPin.Location = new System.Drawing.Point(147, 261);
+            this.txtBoxConfirmPin.Location = new System.Drawing.Point(147, 218);
             this.txtBoxConfirmPin.Name = "txtBoxConfirmPin";
             this.txtBoxConfirmPin.PasswordChar = '*';
             this.txtBoxConfirmPin.Size = new System.Drawing.Size(388, 20);
@@ -163,7 +144,7 @@
             // 
             // txtBoxPin
             // 
-            this.txtBoxPin.Location = new System.Drawing.Point(147, 207);
+            this.txtBoxPin.Location = new System.Drawing.Point(147, 164);
             this.txtBoxPin.Name = "txtBoxPin";
             this.txtBoxPin.PasswordChar = '*';
             this.txtBoxPin.Size = new System.Drawing.Size(388, 20);
@@ -172,7 +153,7 @@
             // lblConfirmPin
             // 
             this.lblConfirmPin.AutoSize = true;
-            this.lblConfirmPin.Location = new System.Drawing.Point(23, 264);
+            this.lblConfirmPin.Location = new System.Drawing.Point(23, 221);
             this.lblConfirmPin.Name = "lblConfirmPin";
             this.lblConfirmPin.Size = new System.Drawing.Size(60, 13);
             this.lblConfirmPin.TabIndex = 18;
@@ -181,7 +162,7 @@
             // lblPin
             // 
             this.lblPin.AutoSize = true;
-            this.lblPin.Location = new System.Drawing.Point(23, 214);
+            this.lblPin.Location = new System.Drawing.Point(23, 171);
             this.lblPin.Name = "lblPin";
             this.lblPin.Size = new System.Drawing.Size(22, 13);
             this.lblPin.TabIndex = 17;
@@ -191,7 +172,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(670, 385);
+            this.ClientSize = new System.Drawing.Size(670, 337);
             this.Controls.Add(this.txtBoxConfirmPin);
             this.Controls.Add(this.txtBoxPin);
             this.Controls.Add(this.lblConfirmPin);
@@ -202,10 +183,8 @@
             this.Controls.Add(this.btnPhoneKey);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.txtBoxPassword);
             this.Controls.Add(this.txtBoxUserName);
             this.Controls.Add(this.txtBoxPhoneKey);
-            this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.lblUserName);
             this.Controls.Add(this.lblPhoneKey);
             this.Name = "CreateUser";
@@ -219,10 +198,8 @@
         #endregion
         private System.Windows.Forms.Label lblPhoneKey;
         private System.Windows.Forms.Label lblUserName;
-        private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.TextBox txtBoxPhoneKey;
         private System.Windows.Forms.TextBox txtBoxUserName;
-        private System.Windows.Forms.TextBox txtBoxPassword;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnPhoneKey;

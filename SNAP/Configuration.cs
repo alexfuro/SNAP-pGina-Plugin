@@ -42,7 +42,6 @@ namespace pGina.Plugin.SNAP
                                UserId INTEGER PRIMARY KEY AUTOINCREMENT,
                                DevId     TEXT  NOT NULL,
                                UserName  TEXT  NOT NULL,
-                               PassWord  TEXT  NOT NULL,
                                UserToken TEXT  NOT NULL,
                                UserPin   TEXT  NOT NULL);
                            CREATE TABLE Logs(

@@ -118,13 +118,7 @@ namespace pGina.Plugin.SNAP
 
                             cmd.ExecuteNonQuery();
                         }
-                        if (txtBoxPassword.Text != "")
-                        {
-                            //Create hash of password
-                            string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
-                            cmd.CommandText = "Update Users set Password='" + hashPass + "' where UserName ='" + encUser + "'";
-                            cmd.ExecuteNonQuery();
-                        }
+                        
                         if (txtBoxPin.Text != "") {
                             //Create hash of pin
                             string hashPin = BCrypt.Net.BCrypt.HashPassword(txtBoxPin.Text);
@@ -137,7 +131,6 @@ namespace pGina.Plugin.SNAP
                         txtBoxPhoneKey.Text = "";
                         txtBoxDevId.Text = "";
                         txtBoxUserName.Text = "";
-                        txtBoxPassword.Text = "";
                         txtBoxPin.Text = "";
                         txtBoxConfirmPin.Text = "";
                         txtBoxCurrPin.Text = "";
