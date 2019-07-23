@@ -30,6 +30,7 @@ namespace pGina.Plugin.SNAP
         public UpdateUser()
         {
             InitializeComponent();
+            con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
         }
 
         private void UpdateUser_Load(object sender, EventArgs e)
@@ -47,7 +48,10 @@ namespace pGina.Plugin.SNAP
         {
             this.Close();
         }
-        private string readNFC(byte[] AID)
+        //this method will open a reader instance and read the nfc device with
+        //cmd as its input and the command to run. it will return a string of the result.
+        //@params cmd - the command to run
+        private string readNFC(CmdApdu cmd)
         {
             PCSCReader reader = new PCSCReader();
             string payload = "";
@@ -57,19 +61,11 @@ namespace pGina.Plugin.SNAP
                 reader.Connect();
                 reader.ActivateCard(GS.SCard.Const.SCARD_SHARE_MODE.Exclusive, GS.SCard.Const.SCARD_PROTOCOL.Tx);
 
-                CmdApdu selectApplication = new CmdApdu();
-                selectApplication.CLA = 0x00;
-                selectApplication.INS = 0xA4;
-                selectApplication.P1 = 0x04;
-                selectApplication.P2 = 0x00;
-                selectApplication.Data = AID;
-                selectApplication.Le = 0x00;
-
-                RespApdu respApdu = reader.Exchange(selectApplication, 0x9000);
+                RespApdu respApdu = reader.Exchange(cmd, 0x9000);
 
                 if (respApdu.SW1SW2 == 0x9000)
                 {
-                    payload = EncryptDecrypt.Encrypt(Encoding.UTF8.GetString(respApdu.Data));
+                    payload = Encoding.UTF8.GetString(respApdu.Data);
                 }
             }
             catch (Exception ex)
@@ -82,25 +78,25 @@ namespace pGina.Plugin.SNAP
             }
             return payload;
         }
-        private Boolean checkPassword()
+        private Boolean checkPin()
         {
             Boolean result = false;
-            string hashedPass = "";
+            string hashedPin = "";
             string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select PassWord From Users where UserName ='"+ encUser + "'", con);
+            da = new SQLiteDataAdapter("Select UserPin From Users where UserName ='"+ encUser + "' limit 1", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
-            hashedPass = ds.Tables[0].Rows[0]["PassWord"].ToString();
+            hashedPin = ds.Tables[0].Rows[0]["UserPin"].ToString();
 
             con.Close();
-            result = BCrypt.Net.BCrypt.Verify(txtBoxCurrPass.Text, hashedPass);
+            result = BCrypt.Net.BCrypt.Verify(txtBoxCurrPin.Text, hashedPin);
             return result;
         }
-        private bool equalPass()
+        private bool equalPin()
         {
-            return txtBoxPassword.Text == txtBoxConfirmPass.Text;
+            return txtBoxPin.Text == txtBoxConfirmPin.Text;
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
@@ -108,34 +104,38 @@ namespace pGina.Plugin.SNAP
             if (hasDatabase()) {
                 if (txtBoxUserName.Text != "")
                 {
-                    if (checkPassword())
+                    if (checkPin())
                     {
                         cmd = new SQLiteCommand();
                         con.Open();
                         cmd.Connection = con;
                         //encrypt user name
                         string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
+                        //Create hash of userToken
+                        string hashToken = BCrypt.Net.BCrypt.HashPassword(txtBoxPhoneKey.Text);
 
-                        if (txtBoxPhoneKey.Text != "") {
+                        if (txtBoxPhoneKey.Text != "" && txtBoxDevId.Text != "") {
 
-                            cmd.CommandText = "Update Users set PublicKey='" + txtBoxPhoneKey.Text + "' where UserName ='" + encUser + "'";
+                            cmd.CommandText = "Update Users set UserToken='" + hashToken + "', DevId='" + txtBoxDevId.Text + "' where UserName ='" + encUser + "'";
 
                             cmd.ExecuteNonQuery();
                         }
-                        if (txtBoxPassword.Text != "" && txtBoxConfirmPass.Text != "" && equalPass()) {
-                            //Create hash of password
-                            string hashPass = BCrypt.Net.BCrypt.HashPassword(txtBoxPassword.Text);
+                        
+                        if (txtBoxPin.Text != "") {
+                            //Create hash of pin
+                            string hashPin = BCrypt.Net.BCrypt.HashPassword(txtBoxPin.Text);
 
-                            cmd.CommandText = "Update Users set Password='" + hashPass + "' where UserName ='" + encUser + "'";
+                            cmd.CommandText = "Update Users set UserPin='" + hashPin + "' where UserName ='" + encUser + "'";
                             cmd.ExecuteNonQuery();
                         }
                         con.Close();
-                        
+
                         txtBoxPhoneKey.Text = "";
+                        txtBoxDevId.Text = "";
                         txtBoxUserName.Text = "";
-                        txtBoxPassword.Text = "";
-                        txtBoxConfirmPass.Text = "";
-                        txtBoxCurrPass.Text = "";
+                        txtBoxPin.Text = "";
+                        txtBoxConfirmPin.Text = "";
+                        txtBoxCurrPin.Text = "";
 
                         MessageBox.Show("Success!");
                     }
@@ -151,13 +151,34 @@ namespace pGina.Plugin.SNAP
 
         private void BtnPhoneKey_Click_1(object sender, EventArgs e)
         {
-            byte[] PhoneKeyAID = { 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0 };
-            txtBoxPhoneKey.Text = readNFC(PhoneKeyAID);
+            //Aid selection for getting token from unlocked phone
+            byte[] tokenAID = { 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0 };
+            CmdApdu selectApplication = new CmdApdu();
+            selectApplication.CLA = 0x00;
+            selectApplication.INS = 0xA4;
+            selectApplication.P1 = 0x04;
+            selectApplication.P2 = 0x00;
+            selectApplication.Data = tokenAID;
+            selectApplication.Le = 0x00;
+            txtBoxPhoneKey.Text = readNFC(selectApplication);
         }
 
         private void TxtBoxPassword_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void Btn_Scan_Id_Click(object sender, EventArgs e)
+        {
+            CmdApdu uid = new CmdApdu();
+            uid.CLA = 0xFF;
+            uid.INS = 0xCA;
+            uid.P1 = 0x01;
+            uid.P2 = 0x00;
+            uid.Le = 0x04;
+
+            string devId = readNFC(uid);
+            txtBoxDevId.Text = devId;
         }
     }
 }

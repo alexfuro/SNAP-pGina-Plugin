@@ -25,25 +25,26 @@ namespace pGina.Plugin.SNAP
         public DeleteUser()
         {
             InitializeComponent();
+            con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
         }
         private Boolean hasDatabase()
         {
             return File.Exists(dbPath);
         }
-        private Boolean checkPassword()
+        private Boolean checkPin()
         {
             Boolean result = false;
-            string hashedPass = "";
+            string hashedPin = "";
             string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
             con = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            da = new SQLiteDataAdapter("Select PassWord From Users where UserName ='" + encUser + "'", con);
+            da = new SQLiteDataAdapter("Select UserPin From Users where UserName ='" + encUser + "'", con);
             DataSet ds = new DataSet();
             con.Open();
             da.Fill(ds, "Users");
-            hashedPass = ds.Tables[0].Rows[0]["PassWord"].ToString();
+            hashedPin = ds.Tables[0].Rows[0]["UserPin"].ToString();
 
             con.Close();
-            result = BCrypt.Net.BCrypt.Verify(txtBoxCurrPass.Text, hashedPass);
+            result = BCrypt.Net.BCrypt.Verify(txtBoxCurrPin.Text, hashedPin);
             return result;
         }
 
@@ -54,7 +55,7 @@ namespace pGina.Plugin.SNAP
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (txtBoxUserName.Text != "" && txtBoxCurrPass.Text != "" && hasDatabase() && checkPassword())
+            if (txtBoxUserName.Text != "" && txtBoxCurrPin.Text != "" && hasDatabase() && checkPin())
             {
                 cmd = new SQLiteCommand();
                 con.Open();
@@ -66,7 +67,7 @@ namespace pGina.Plugin.SNAP
                 con.Close();
 
                 txtBoxUserName.Text = "";
-                txtBoxCurrPass.Text = "";
+                txtBoxCurrPin.Text = "";
                 MessageBox.Show("Success!");
             }
             else {

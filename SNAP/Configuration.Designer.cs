@@ -31,9 +31,9 @@
             this.btnCreateUser = new System.Windows.Forms.Button();
             this.btnUpdateUser = new System.Windows.Forms.Button();
             this.btnDeleteUser = new System.Windows.Forms.Button();
-            this.dataGridViewLogs = new System.Windows.Forms.DataGridView();
+            this.dataViewLogs = new System.Windows.Forms.DataGridView();
             this.lblLogs = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLogs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataViewLogs)).BeginInit();
             this.SuspendLayout();
             // 
             // btnCreateUser
@@ -66,13 +66,16 @@
             this.btnDeleteUser.UseVisualStyleBackColor = true;
             this.btnDeleteUser.Click += new System.EventHandler(this.BtnDeleteUser_Click);
             // 
-            // dataGridViewLogs
+            // dataViewLogs
             // 
-            this.dataGridViewLogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewLogs.Location = new System.Drawing.Point(12, 161);
-            this.dataGridViewLogs.Name = "dataGridViewLogs";
-            this.dataGridViewLogs.Size = new System.Drawing.Size(575, 277);
-            this.dataGridViewLogs.TabIndex = 3;
+            this.dataViewLogs.AllowUserToAddRows = false;
+            this.dataViewLogs.AllowUserToDeleteRows = false;
+            this.dataViewLogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataViewLogs.Location = new System.Drawing.Point(12, 161);
+            this.dataViewLogs.Name = "dataViewLogs";
+            this.dataViewLogs.ReadOnly = true;
+            this.dataViewLogs.Size = new System.Drawing.Size(575, 277);
+            this.dataViewLogs.TabIndex = 3;
             // 
             // lblLogs
             // 
@@ -89,14 +92,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.lblLogs);
-            this.Controls.Add(this.dataGridViewLogs);
+            this.Controls.Add(this.dataViewLogs);
             this.Controls.Add(this.btnDeleteUser);
             this.Controls.Add(this.btnUpdateUser);
             this.Controls.Add(this.btnCreateUser);
             this.Name = "Configuration";
             this.Text = "Configuration";
             this.Load += new System.EventHandler(this.Configuration_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLogs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataViewLogs)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -107,7 +110,7 @@
         private System.Windows.Forms.Button btnCreateUser;
         private System.Windows.Forms.Button btnUpdateUser;
         private System.Windows.Forms.Button btnDeleteUser;
-        private System.Windows.Forms.DataGridView dataGridViewLogs;
+        private System.Windows.Forms.DataGridView dataViewLogs;
         private System.Windows.Forms.Label lblLogs;
     }
 }

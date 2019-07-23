@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtBoxCurrPass = new System.Windows.Forms.TextBox();
+            this.txtBoxCurrPin = new System.Windows.Forms.TextBox();
             this.lblCurrPass = new System.Windows.Forms.Label();
             this.txtBoxUserName = new System.Windows.Forms.TextBox();
             this.lblUserName = new System.Windows.Forms.Label();
@@ -36,22 +36,22 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // txtBoxCurrPass
+            // txtBoxCurrPin
             // 
-            this.txtBoxCurrPass.Location = new System.Drawing.Point(136, 57);
-            this.txtBoxCurrPass.Name = "txtBoxCurrPass";
-            this.txtBoxCurrPass.PasswordChar = '*';
-            this.txtBoxCurrPass.Size = new System.Drawing.Size(388, 20);
-            this.txtBoxCurrPass.TabIndex = 31;
+            this.txtBoxCurrPin.Location = new System.Drawing.Point(136, 57);
+            this.txtBoxCurrPin.Name = "txtBoxCurrPin";
+            this.txtBoxCurrPin.PasswordChar = '*';
+            this.txtBoxCurrPin.Size = new System.Drawing.Size(388, 20);
+            this.txtBoxCurrPin.TabIndex = 31;
             // 
             // lblCurrPass
             // 
             this.lblCurrPass.AutoSize = true;
             this.lblCurrPass.Location = new System.Drawing.Point(13, 64);
             this.lblCurrPass.Name = "lblCurrPass";
-            this.lblCurrPass.Size = new System.Drawing.Size(90, 13);
+            this.lblCurrPass.Size = new System.Drawing.Size(59, 13);
             this.lblCurrPass.TabIndex = 32;
-            this.lblCurrPass.Text = "Current Password";
+            this.lblCurrPass.Text = "Current Pin";
             // 
             // txtBoxUserName
             // 
@@ -96,7 +96,7 @@
             this.ClientSize = new System.Drawing.Size(546, 195);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.txtBoxCurrPass);
+            this.Controls.Add(this.txtBoxCurrPin);
             this.Controls.Add(this.lblCurrPass);
             this.Controls.Add(this.txtBoxUserName);
             this.Controls.Add(this.lblUserName);
@@ -109,7 +109,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtBoxCurrPass;
+        private System.Windows.Forms.TextBox txtBoxCurrPin;
         private System.Windows.Forms.Label lblCurrPass;
         private System.Windows.Forms.TextBox txtBoxUserName;
         private System.Windows.Forms.Label lblUserName;
