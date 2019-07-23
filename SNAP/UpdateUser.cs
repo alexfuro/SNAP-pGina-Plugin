@@ -111,10 +111,12 @@ namespace pGina.Plugin.SNAP
                         cmd.Connection = con;
                         //encrypt user name
                         string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
+                        //Create hash of userToken
+                        string hashToken = BCrypt.Net.BCrypt.HashPassword(txtBoxPhoneKey.Text);
 
                         if (txtBoxPhoneKey.Text != "" && txtBoxDevId.Text != "") {
 
-                            cmd.CommandText = "Update Users set UserToken='" + txtBoxPhoneKey.Text + "', DevId='" + txtBoxDevId.Text + "' where UserName ='" + encUser + "'";
+                            cmd.CommandText = "Update Users set UserToken='" + hashToken + "', DevId='" + txtBoxDevId.Text + "' where UserName ='" + encUser + "'";
 
                             cmd.ExecuteNonQuery();
                         }

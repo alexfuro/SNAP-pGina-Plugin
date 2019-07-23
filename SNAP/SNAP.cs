@@ -202,8 +202,7 @@ namespace SNAP
         }
         //this method will verify if the user token is associated with an account
         private Boolean verifyToken(string userTokenInput, string userToken) {
-            //return BCrypt.Net.BCrypt.Verify(userTokenInput, userToken);
-            return true;
+            return BCrypt.Net.BCrypt.Verify(userTokenInput, userToken);
         }
         
         //This method is what is in change of authenticating a user

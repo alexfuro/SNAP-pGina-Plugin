@@ -104,11 +104,14 @@ namespace pGina.Plugin.SNAP
                             //encrypt user name
                             string encUser = EncryptDecrypt.Encrypt(txtBoxUserName.Text);
 
-                            //Create hash of password
+                            //Create hash of pin
                             string hashPin = BCrypt.Net.BCrypt.HashPassword(txtBoxPin.Text);
 
+                            //Create hash of userToken
+                            string hashToken = BCrypt.Net.BCrypt.HashPassword(txtBoxPhoneKey.Text);
+
                             cmd.CommandText = "insert into Users(DevId,UserName,UserToken,UserPin) values ('" +
-                                    txtBoxDevId.Text + "','" + encUser + "','" + txtBoxPhoneKey.Text + "','" + hashPin + "')";
+                                    txtBoxDevId.Text + "','" + encUser + "','" + hashToken + "','" + hashPin + "')";
 
                             cmd.ExecuteNonQuery();
                             con.Close();
